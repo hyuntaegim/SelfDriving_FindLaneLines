@@ -162,3 +162,31 @@ def draw_extrapolated_lane_lines(image, lines, color=[255, 0, 0], thickness=15):
 
     return cv2.addWeighted(image, 1.0, line_image, 0.95, 0.0)
 ```
+
+### Lane dectection on Video clips
+```python
+from moviepy.editor import VideoFileClip
+from IPython.display import HTML
+```
+
+```python
+def process_image(image):
+    # NOTE: The output you return should be a color image (3 channel) for processing video below
+    # TODO: put your pipeline here,
+    # you should return the final output (image where lines are drawn on lanes)
+    
+    gray_image = transform_image_to_grayscale(image)
+    blurred_image = blur_image(gray_image) 
+    edge_extracted_image = extract_edges_from_image(blurred_image)
+    
+    vertices = vertices_for_img(edge_extracted_image)
+    masked_edge_image = add_mask_to_image(edge_extracted_image, vertices)
+
+    lines = hough_lines(masked_edge_image)
+    line_detected_image = draw_lines(image, lines)
+    
+    lane_lines = calculate_average_lane_lines(image, lines)
+    result = draw_extrapolated_lane_lines(image, lane_lines)
+    
+    return result
+```
