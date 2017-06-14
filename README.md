@@ -3,11 +3,14 @@
 
 <img src="test_images/whiteCarLaneSwitch.jpg" width="480" alt="Combined Image" />
 
-Introduction
+Overview
 ---
 This is a write-up for the first project of Self-driving car course of Udacity. This will be updated soon.
 
 ### Import Package
+
+Basically OpenCV, Numpy and MatplotLib were used in this exercise. OpenCV library was used for grayscale, blur, Canny algorithm, Hough Line algorithm and drawing lines. Numpy library takes a role for calculating the math. And Matplotlib is drawing graphical components.
+
 ```python
 import os, glob
 import matplotlib.pyplot as plt
@@ -18,6 +21,7 @@ import cv2
 ```
 
 ### Loading test images
+
 ```python
 def present_images(images, cmap=None):
     cols = 2
@@ -35,12 +39,18 @@ def present_images(images, cmap=None):
 ```
 
 ### Converting images to grayscale
+
+The first step of this process is convert color image to grayscale. This will improve output quality of extracting edges from the image.
+
 ```python
 def transform_image_to_grayscale(img):
     return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 ```
 
 ### Making image smoother
+
+Gaussian smoothing should be added, before running Canny, which is essentially a way of suppressing noise and spurious gradients by averaging. cv2.Canny() actually applies Gaussian smoothing internally, but we include it here because you can get a different result by applying further smoothing.
+
 ```python
 def blur_image(img, kernel_size=15):
     return cv2.GaussianBlur(img, (kernel_size, kernel_size), 0)
@@ -50,12 +60,18 @@ present_images(blurred_images)
 ```
 
 ### Extracting edges from image
+
+The algorithm will first detect strong edge (strong gradient) pixels above the high_threshold, and reject pixels below the low_threshold. Next, pixels with values between the low_threshold and high_threshold will be included as long as they are connected to strong edges. The output edges is a binary image with white pixels tracing out the detected edges and black everywhere else.
+
 ```python
 def extract_edges_from_image(img, low_threadhold=50, high_threadhold=150):
     return cv2.Canny(img, low_threadhold, high_threadhold)
 ```
 
 ### Adding Mask of Interest Region
+
+To reduce extra unnecessary calculation and to focus only in the place where I'm interesting in, should add mask on the region. 
+
 ```python
 def add_mask_to_image(img, vertices):
     mask = np.zeros_like(img)
@@ -83,9 +99,15 @@ def vertices_for_img(img):
 ```
 
 ### Appling Hough Lines Algorithm
+
+Hough Line algorithm will connect all disconnected lines and dots together.
+
+Let's me explain about the selector of cv2.HoughLinesP method. First off, rho and theta are the distance and angular resolution of my grid in Hough space. Need to specify rho in units of pixels and theta in units of radians. Rho takes a minimum value of 1, and a reasonable starting place for theta is 1 degree (pi/180 in radians). The threshold parameter specifies the minimum number of votes (intersections in a given grid cell) a candidate line needs to have to make it into the output. min_line_length is the minimum length of a line (in pixels) that will accept in the output, and max_line_gap is the maximum distance (again, in pixels) between segments that will be connected into a single line. And it will iterate through output lines and draw them onto the image.
+
+
 ```python
 def hough_lines(img):
-    return cv2.HoughLinesP(img,rho=1, theta=np.pi/180, threshold=20, minLineLength=20, maxLineGap=300)
+    return cv2.HoughLinesP(img, rho=1, theta=np.pi/180, threshold=20, minLineLength=20, maxLineGap=300)
 
 def draw_lines(img, lines, color=[255, 0, 0], thickness=2):
     img = np.copy(img)# don't want to change the original image
