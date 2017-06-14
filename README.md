@@ -37,6 +37,7 @@ def present_images(images, cmap=None):
     plt.tight_layout(pad=0, h_pad=0, w_pad=0)
     plt.show()
 ```
+<img src="resources/ss_1.png" width="700" alt="Original Images" />
 
 ### Converting images to grayscale
 
@@ -46,6 +47,7 @@ The first step of this process is convert color image to grayscale. This will im
 def transform_image_to_grayscale(img):
     return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 ```
+<img src="resources/ss_2.png" width="700" alt="Grayscaled Images" />
 
 ### Making image smoother
 
@@ -58,6 +60,7 @@ def blur_image(img, kernel_size=15):
 blurred_images = list(map(blur_image, gray_images))
 present_images(blurred_images)
 ```
+<img src="resources/ss_3.png" width="700" alt="Blurred Images" />
 
 ### Extracting edges from image
 
@@ -67,6 +70,7 @@ The algorithm will first detect strong edge (strong gradient) pixels above the h
 def extract_edges_from_image(img, low_threadhold=50, high_threadhold=150):
     return cv2.Canny(img, low_threadhold, high_threadhold)
 ```
+<img src="resources/ss_4.png" width="700" alt="Extracted edges" />
 
 ### Adding Mask of Interest Region
 
@@ -97,6 +101,7 @@ def vertices_for_img(img):
     
     return np.array([[left_bottom,left_top,right_top,right_bottom]], dtype=np.int32)
 ```
+<img src="resources/ss_5.png" width="700" alt="Mask Added" />
 
 ### Appling Hough Lines Algorithm
 
@@ -117,6 +122,8 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=2):
             cv2.line(img, (x1,y1), (x2,y2), color, thickness)
     return img
 ```
+
+<img src="resources/ss_6.png" width="700" alt="Hough Line Algorithm applied" />
 
 ### Averaging/Extrapolating Lines
 ```python
@@ -184,6 +191,7 @@ def draw_extrapolated_lane_lines(image, lines, color=[255, 0, 0], thickness=15):
 
     return cv2.addWeighted(image, 1.0, line_image, 0.95, 0.0)
 ```
+<img src="resources/ss_7.png" width="700" alt="" />
 
 ### Lane dectection on Video clips
 ```python
