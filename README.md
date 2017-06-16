@@ -5,7 +5,7 @@
 
 Overview
 ---
-This is a write-up for the first project of Self-driving car course of Udacity. This will be updated soon.
+To self-driving cars, detecting lane is very basic and essential feature to have. May be, image processing is the easiest way to handle it without high tech sensor hardwares. However it still provide us a good output though. The following pipeline uses many different techniques to achieve our goal. 
 
 ### Import Package
 
