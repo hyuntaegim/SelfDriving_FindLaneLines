@@ -220,3 +220,5 @@ def process_image(image):
     
     return result
 ```
+### Limitation
+Those implementation has limitations. My methodology can detect straight lines only. Currently Hough Line algorithm was used, and extrapolated the output of it. Which returns nice looking results from my test images, which have straight lane lines only. And the way I did might not be a best practice for the situation that has more vehicles are running closely. This pipeline tries to detect lines from the extracted edges of the images. So if most of straight lines were hiden from other objects, it will be failed to returns an appropriate output, so we shouldn't depend only on image processing for detecting street lanes.
